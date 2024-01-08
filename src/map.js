@@ -79,7 +79,7 @@ function MyComponent() {
   const [allCoverages, setAllCoverages] = useState([]);
   const [organizations, setOrganizations] = useState([]);
   const [allOrganizations, setAllOrganizations] = useState([]);
-  const [label, setLabel] = useState("Select a category / location and hit 'apply' to lookup companies.");
+  const [label, setLabel] = useState("Select a category / location and click 'apply' to lookup companies.");
   const [markers, setMarkers] = useState([]);
   const [map, setMap] = useState(null);
 
@@ -256,7 +256,8 @@ useEffect(() => {
       console.log("filterOrgs.length after filter", filterOrgs.length)
     }
     if (filterOrgs.length > 0) {
-      setLabel(`${filterOrgs.length} companies found.`)
+      let companyOrCompanies = filterOrgs.length > 1 ? 'companies' : 'company'
+      setLabel(`${filterOrgs.length} ${companyOrCompanies} found.`)
     } else {
       setLabel(`No results found for your category / location filters.`)
     }
