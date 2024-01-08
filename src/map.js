@@ -1,6 +1,6 @@
 import React from 'react'
 import { GoogleMap, useLoadScript, MarkerF, InfoWindowF } from '@react-google-maps/api';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Select from 'react-select';
 
 
@@ -14,9 +14,11 @@ const center = { lng: -4.2583, lat: 55.8617 }
 const mapOptions = {
   disableDefaultUI: true, // Disables default controls
   zoomControl: true, // Enable zoom control (you can set it to false if you don't want it)
+  
   clickableIcons: false
 };
 
+  
 
 const miniLabel = (text) => {
   return <span style={{fontWeight:'bold'}}>{text}</span>
@@ -76,7 +78,29 @@ function MyComponent() {
   const [allCategories, setAllCategories] = useState([]);
   const [allCoverages, setAllCoverages] = useState([]);
   const [organizations, setOrganizations] = useState([]);
-  const [allOrganizations, setAllOrganizations] = useState([])
+  const [allOrganizations, setAllOrganizations] = useState([]);
+  const [label, setLabel] = useState("Select a category / location and hit 'apply' to lookup companies.");
+  const [markers, setMarkers] = useState([]);
+  const [map, setMap] = useState(null);
+
+  const onLoad = useCallback((map) => setMap(map), []);
+
+// Function to get bounds and set center/zoom
+const fitBounds = () => {
+  // if (organizations.length === 0) {
+  //   return;
+  // }
+
+  // const bounds = new window.google.maps.LatLngBounds();
+  // console.log(bounds)
+  // organizations.forEach((marker) => {
+  //   // bounds.extend(marker.position);
+  //   bounds.extend({ lat: marker.fields['Latitude'], lng: marker.fields['Longitude'] }, { animate: true })
+  // });
+
+  // map.fitBounds(bounds);
+};
+
   useEffect(() => {
     //console.log("use Effect fetch data")
     const fetchData = async () => {
@@ -138,15 +162,7 @@ function MyComponent() {
   })
   // const apiKey='AIzaSyBnpmjpM-';
 
-  const [map, setMap] = useState(null)
 
-  // const onLoad = React.useCallback(function callback(map) {
-  //   // This is just an example of getting and using the map instance!!! don't just blindly copy!
-  //   const bounds = new window.google.maps.LatLngBounds(center);
-  //   map.fitBounds(bounds);
-
-  //   setMap(map)
-  // }, [])
 
   // const onUnmount = React.useCallback(function callback(map) {
   //   setMap(null)
@@ -181,7 +197,7 @@ function MyComponent() {
       if (position !== null) {
       markers.push(<MarkerF
       // onclick
-        key={organization.id}
+        key={i}
         // lat: -3.745,
         // lng: -38.523
         position={position}
@@ -193,6 +209,15 @@ function MyComponent() {
     return markers
   }
   
+useEffect(() => {
+  const markerPins = drawMarkers(organizations)
+  setMarkers(markerPins)
+}, [organizations])
+
+useEffect(() => {
+  fitBounds()
+}, [markers])
+
   useEffect((newValue) => {
     console.log("new selected value", selectedCat, selectedCov)
   }, [selectedCat, selectedCov ])
@@ -230,6 +255,12 @@ function MyComponent() {
       })
       console.log("filterOrgs.length after filter", filterOrgs.length)
     }
+    if (filterOrgs.length > 0) {
+      setLabel(`${filterOrgs.length} companies found.`)
+    } else {
+      setLabel(`No results found for your category / location filters.`)
+    }
+    setSelectedMarker(null)
     setOrganizations(filterOrgs)
   }
  const buttonStyle = {padding: '10px',
@@ -285,17 +316,18 @@ function MyComponent() {
 </div>
 <button onClick={onApplyHandler} style={buttonStyle}>Apply</button>
     </div>
+        <p>{label}</p>
       <GoogleMap
         mapContainerStyle={containerStyle}
         center={center}
         options={mapOptions}
-        // onLoad={onLoad}
+        onLoad={onLoad}
         // onUnmount={onUnmount}
         zoom={12}
       >
 
-        {drawMarkers(organizations)}
-        
+        {/* {drawMarkers(organizations)} */}
+        {markers}
         
         {selectedMarker && (
           <InfoWindowF
