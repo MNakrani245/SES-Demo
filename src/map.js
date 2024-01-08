@@ -1,7 +1,6 @@
 import React from 'react'
 import { GoogleMap, useLoadScript, MarkerF, InfoWindowF } from '@react-google-maps/api';
 import { useEffect, useState } from 'react';
-import { Dropdown, Button } from 'react-bootstrap';
 import Select from 'react-select';
 
 
@@ -141,17 +140,17 @@ function MyComponent() {
 
   const [map, setMap] = useState(null)
 
-  const onLoad = React.useCallback(function callback(map) {
-    // This is just an example of getting and using the map instance!!! don't just blindly copy!
-    const bounds = new window.google.maps.LatLngBounds(center);
-    map.fitBounds(bounds);
+  // const onLoad = React.useCallback(function callback(map) {
+  //   // This is just an example of getting and using the map instance!!! don't just blindly copy!
+  //   const bounds = new window.google.maps.LatLngBounds(center);
+  //   map.fitBounds(bounds);
 
-    setMap(map)
-  }, [])
+  //   setMap(map)
+  // }, [])
 
-  const onUnmount = React.useCallback(function callback(map) {
-    setMap(null)
-  }, [])
+  // const onUnmount = React.useCallback(function callback(map) {
+  //   setMap(null)
+  // }, [])
 
   const mapStyles = {
     height: '400px',
@@ -193,11 +192,6 @@ function MyComponent() {
     }
     return markers
   }
-  const selectOptions = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-  ];
   
   useEffect((newValue) => {
     console.log("new selected value", selectedCat, selectedCov)
