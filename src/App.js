@@ -1,3 +1,5 @@
+import React from 'react'
+
 import MyComponent from "./map";
 function App() {
   return (
