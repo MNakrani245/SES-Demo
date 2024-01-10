@@ -284,8 +284,8 @@ useEffect(() => {
         
         control: (baseStyles, state) => ({
           ...baseStyles,
-          width: '420px',
-          marginRight: '10px',
+          width: '400px',
+          // marginRight: '10px',
         }),
       }}
     
@@ -304,8 +304,8 @@ useEffect(() => {
             }),
             control: (baseStyles, state) => ({
               ...baseStyles,
-              width: '420px',
-              marginRight: '10px'
+              width: '400px',
+              // paddingRight: '10px'
             }),
           }}
     
